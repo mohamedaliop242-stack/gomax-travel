@@ -93,18 +93,22 @@
         .selected-car-preview {
             text-align: center;
             margin: 1.5rem 0;
-            min-height: 250px; /* لضمان وجود مساحة بيضاء قبل تحميل الصورة */
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .selected-car-preview img {
             width: 100%;
             max-width: 450px;
             height: auto;
-            max-height: 300px;
-            object-fit: contain; /* لضمان عدم قص الصورة وظهورها كاملة */
+            max-height: 280px;
+            object-fit: contain;
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             border: 2px solid var(--secondary);
-            display: none; /* مخفي افتراضياً حتى يتم اختيار سيارة */
+            display: none;
+            background-color: #ffffff;
         }
         .fleet-grid {
             display: grid;
@@ -123,8 +127,9 @@
         .fleet-card img {
             width: 100%;
             height: 180px;
-            object-fit: cover;
-            background-color: #f1f5f9;
+            object-fit: contain;
+            background-color: #ffffff;
+            padding: 10px;
         }
         .fleet-card-body {
             padding: 1.5rem;
@@ -191,12 +196,11 @@
                 </select>
             </div>
 
-            <!-- مربع عرض صورة السيارة المختارة (مخفي حتى يتم الاختيار) -->
             <div class="selected-car-preview">
                 <img id="carImagePreview" src="" alt="صورة السيارة المختارة">
             </div>
 
-            <div class="price-display" id="priceDisplay">السعر: اختر المسار والسيارة للتعرف على السعر</div>
+            <div class="price-display" id="priceDisplay">السعر: اختر السيارة للتعرف على السعر</div>
             
             <button onclick="sendToWhatsapp()">تأكيد الحجز عبر الواتساب 💬</button>
         </div>
@@ -204,35 +208,31 @@
         <h2 style="text-align: center; margin-top: 4rem; color: var(--primary);">أسطول GO MAX Travel</h2>
         <div class="fleet-grid">
             <div class="fleet-card">
-                <img src="./فورد-تورس-ترند-2.0-2026-2.jpg" alt="فورد تورس VIP">
+                <img src="./taurus.jpg" alt="فورد تورس VIP">
                 <div class="fleet-card-body">
                     <h3>فورد تورس VIP</h3>
                     <p>سعة 4 ركاب</p>
-                    <p>تنقلات VIP سريعة ومريحة</p>
                 </div>
             </div>
             <div class="fleet-card">
-                <img src="./استاريا.webp" alt="هيونداي ستاريا VIP">
+                <img src="./staria.webp" alt="هيونداي ستاريا VIP">
                 <div class="fleet-card-body">
                     <h3>هيونداي ستاريا VIP</h3>
                     <p>سعة 8 ركاب</p>
-                    <p>مساحات واسعة ومناسبة للعائلات والمجموعات</p>
                 </div>
             </div>
             <div class="fleet-card">
-                <img src="./جيمس.jpg" alt="جمس يوكون VIP">
+                <img src="./GMC.jpg" alt="جمس يوكون VIP">
                 <div class="fleet-card-body">
                     <h3>جمس يوكون VIP</h3>
                     <p>سعة 7 ركاب</p>
-                    <p>فخامة مطلقة واستقبال كبار الشخصيات</p>
                 </div>
             </div>
             <div class="fleet-card">
-                <img src="./هايس-فان-2026-ركاب-سقف-مرتفع-ديزل-قير-عادي.webp" alt="تويوتا هايس">
+                <img src="./hiace.webp" alt="تويوتا هايس">
                 <div class="fleet-card-body">
                     <h3>تويوتا هايس</h3>
                     <p>سعة 11 راكب</p>
-                    <p>الحل المثالي لبرامج العمرة والوفود السياحية</p>
                 </div>
             </div>
         </div>
@@ -251,10 +251,10 @@
 
     <script>
         const carImages = {
-            taurus: './فورد-تورس-ترند-2.0-2026-2.jpg',
-            staria: './استاريا.webp',
-            yukon: './جيمس.jpg',
-            hiace: './هايس-فان-2026-ركاب-سقف-مرتفع-ديزل-قير-عادي.webp'
+            taurus: './taurus.jpg',
+            staria: './staria.webp',
+            yukon: './GMC.jpg',
+            hiace: './hiace.webp'
         };
 
         const prices = [
@@ -282,20 +282,17 @@
             const routeIndex = routeSelect.value;
             const carType = carSelect.value;
 
-            // إذا لم يتم اختيار نوع سيارة بعد، قم بإخفاء مربع السعر وصورة السيارة
             if (!carType) {
                 priceDisplay.innerText = "السعر: اختر السيارة للتعرف على السعر";
                 carImagePreview.style.display = 'none';
                 return;
             }
 
-            // تحديث السعر بناءً على المسار والسيارة
             const selectedPrice = prices[routeIndex][carType];
             priceDisplay.innerText = `السعر: ${selectedPrice} ريال سعودي`;
 
-            // تحديث صورة السيارة بناءً على الاختيار
             carImagePreview.src = carImages[carType];
-            carImagePreview.style.display = 'block'; // إظهار الصورة
+            carImagePreview.style.display = 'block';
         }
 
         function sendToWhatsapp() {
@@ -324,7 +321,6 @@
             window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
         }
 
-        // تشغيل الدالة مرة واحدة للتأكد من الحالة الابتدائية
         updateBookingDetails();
     </script>
 </body>
