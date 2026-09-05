@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GO MAX Travel | جو ماكس للسياحة والنقل</title>
+    <style>
+        :root {
+            --primary: #0a2540;
+            --secondary: #ff6b00;
+            --dark: #1f2937;
+            --light: #f8fafc;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+            text-transform: uppercase;
+        }
+        .hero {
+            background: linear-gradient(rgba(10, 37, 64, 0.85), rgba(10, 37, 64, 0.85)), url('https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 5rem 1rem;
+        }
+        .container {
+            max-width: 1100px;
+            margin: -3rem auto 2rem;
+            padding: 0 1rem;
+        }
+        .booking-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #25d366;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.1rem;
+        }
+        button:hover {
+            background-color: #128c7e;
+        }
+        .price-display {
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--primary);
+            font-weight: bold;
+            background-color: #e0f2fe;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .fleet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .fleet-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--secondary);
+        }
+        .b2b-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">GO MAX <span style="color:white;">Travel</span></div>
+        <div>📞 +966508006718</div>
+    </header>
+
+    <section class="hero">
+        <h1>GO MAX Travel - خدمات النقل والسياحة الاحترافية</h1>
+        <p>توصيل وتنقلات فاخرة بين مدن المملكة العربية السعودية بأعلى معايير الجودة</p>
+    </section>
+
+    <div class="container">
+        <div class="booking-card">
+            <h2 style="text-align: center; color: var(--primary); margin-top: 0;">احسب سعر مشوارك واحجز فوراً</h2>
+            
+            <div class="form-group">
+                <label>اختر خط السير / المشوار:</label>
+                <select id="routeSelect" onchange="calculatePrice()">
+                    <option value="0">من مطار جدة إلى داخل جدة</option>
+                    <option value="1">من مطار جدة إلى مكة</option>
+                    <option value="2">من مطار جدة إلى مدينة الملك عبدالله</option>
+                    <option value="3">من جدة إلى الطائف</option>
+                    <option value="4">من جدة إلى المدينة</option>
+                    <option value="5">من محطة قطار مكة إلى داخل مكة</option>
+                    <option value="6">من مكة إلى الطائف</option>
+                    <option value="7">من مكة إلى المدينة</option>
+                    <option value="8">من مطار المدينة إلى داخل المدينة</option>
+                    <option value="9">من محطة قطار المدينة إلى داخل المدينة</option>
+                    <option value="10">من المدينة إلى ينبع</option>
+                    <option value="11">مطار جدة - مكة - المدينة - مطار المدينة</option>
+                    <option value="12">مطار جدة - مكة - المدينة - مطار جدة</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>اختر نوع السيارة:</label>
+                <select id="carSelect" onchange="calculatePrice()">
+                    <option value="taurus">فورد تورس VIP (4 PAX)</option>
+                    <option value="staria">هيونداي ستاريا VIP (8 PAX)</option>
+                    <option value="yukon">جمس يوكون VIP (7 PAX)</option>
+                    <option value="hiace">تويوتا هايس (11 PAX)</option>
+                </select>
+            </div>
+
+            <div class="price-display" id="priceDisplay">السعر: 150 ريال سعودي</div>
+            
+            <button onclick="sendToWhatsapp()">تأكيد الحجز عبر الواتساب 💬</button>
+        </div>
+
+        <h2 style="text-align: center; margin-top: 4rem; color: var(--primary);">أسطول GO MAX Travel</h2>
+        <div class="fleet-grid">
+            <div class="fleet-card">
+                <h3>فورد تورس VIP</h3>
+                <p>سعة 4 ركاب</p>
+                <p>تنقلات VIP سريعة ومريحة</p>
+            </div>
+            <div class="fleet-card">
+                <h3>هيونداي ستاريا VIP</h3>
+                <p>سعة 8 ركاب</p>
+                <p>مساحات واسعة ومناسبة للعائلات والمجموعات</p>
+            </div>
+            <div class="fleet-card">
+                <h3>جمس يوكون VIP</h3>
+                <p>سعة 7 ركاب</p>
+                <p>فخامة مطلقة واستقبال كبار الشخصيات</p>
+            </div>
+            <div class="fleet-card">
+                <h3>تويوتا هايس</h3>
+                <p>سعة 11 راكب</p>
+                <p>الحل المثالي لبرامج العمرة والوفود السياحية</p>
+            </div>
+        </div>
+
+        <div class="b2b-section">
+            <h2 style="text-align: center; color: var(--primary);">خدمات الشركات والتعاقدات (B2B)</h2>
+            <p style="text-align: center;">هل تمثل شركة أو وكالة سفر؟ نوفر لكم تعاقدات مستمرة بأسعار خاصة لتنفيذ طلبات عملائكم بدقة وتنسيق عالي.</p>
+            <button style="background-color: var(--primary);" onclick="sendB2BWhatsapp()">تواصل معنا للاتفاقيات والعقود 🤝</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>جميع الحقوق محفوظة © GO MAX Travel</p>
+        <p>البريد الإلكتروني: Hawlalalm11@gmail.com | هاتف: +966508006718</p>
+    </footer>
+
+    <script>
+        const prices = [
+            { taurus: 150, staria: 200, yukon: 250, hiace: 250 },
+            { taurus: 250, staria: 300, yukon: 400, hiace: 400 },
+            { taurus: 250, staria: 300, yukon: 400, hiace: 400 },
+            { taurus: 450, staria: 600, yukon: 700, hiace: 700 },
+            { taurus: 650, staria: 750, yukon: 1100, hiace: 900 },
+            { taurus: 150, staria: 200, yukon: 200, hiace: 250 },
+            { taurus: 350, staria: 400, yukon: 600, hiace: 300 },
+            { taurus: 650, staria: 750, yukon: 1100, hiace: 900 },
+            { taurus: 200, staria: 200, yukon: 300, hiace: 250 },
+            { taurus: 200, staria: 200, yukon: 300, hiace: 250 },
+            { taurus: 700, staria: 800, yukon: 1000, hiace: 900 },
+            { taurus: 1000, staria: 1200, yukon: 1700, hiace: 1500 },
+            { taurus: 1500, staria: 1700, yukon: 2500, hiace: 2200 }
+        ];
+
+        function calculatePrice() {
+            const routeIndex = document.getElementById('routeSelect').value;
+            const carType = document.getElementById('carSelect').value;
+            const selectedPrice = prices[routeIndex][carType];
+            
+            document.getElementById('priceDisplay').innerText = `السعر: ${selectedPrice} ريال سعودي`;
+        }
+
+        function sendToWhatsapp() {
+            const routeText = document.getElementById('routeSelect').options[document.getElementById('routeSelect').selectedIndex].text;
+            const carText = document.getElementById('carSelect').options[document.getElementById('carSelect').selectedIndex].text;
+            const priceText = document.getElementById('priceDisplay').innerText;
+
+            const phoneNumber = "966508006718";
+            const message = `مرحباً شركة GO MAX Travel، أرغب في حجز المشوار التالي:%0A%0A📍 *المسار:* ${routeText}%0A🚗 *نوع السيارة:* ${carText}%0A💰 *${priceText}*%0A%0Aيرجى تأكيد الحجز.`;
+
+            window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+        }
+
+        function sendB2BWhatsapp() {
+            const phoneNumber = "966508006718";
+            const message = `مرحباً GO MAX Travel، نحن شركة ونود الاستفسار عن التعاقدات والأسعار المخصصة للشركات.`;
+            window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+        }
+    </script>
+</body>
+</html>
