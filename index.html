@@ -83,12 +83,28 @@
         .price-display {
             font-size: 1.8rem;
             text-align: center;
-            margin: 1.5rem 0;
+            margin: 1.5rem 0 1rem;
             color: var(--primary);
             font-weight: bold;
             background-color: #e0f2fe;
             padding: 1rem;
             border-radius: 8px;
+        }
+        .selected-car-preview {
+            text-align: center;
+            margin: 1.5rem 0;
+            min-height: 250px; /* لضمان وجود مساحة بيضاء قبل تحميل الصورة */
+        }
+        .selected-car-preview img {
+            width: 100%;
+            max-width: 450px;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain; /* لضمان عدم قص الصورة وظهورها كاملة */
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 2px solid var(--secondary);
+            display: none; /* مخفي افتراضياً حتى يتم اختيار سيارة */
         }
         .fleet-grid {
             display: grid;
@@ -99,10 +115,19 @@
         .fleet-card {
             background: white;
             border-radius: 8px;
-            padding: 1.5rem;
+            overflow: hidden;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border-top: 4px solid var(--secondary);
+        }
+        .fleet-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #f1f5f9;
+        }
+        .fleet-card-body {
+            padding: 1.5rem;
         }
         .b2b-section {
             background: white;
@@ -138,7 +163,7 @@
             
             <div class="form-group">
                 <label>اختر خط السير / المشوار:</label>
-                <select id="routeSelect" onchange="calculatePrice()">
+                <select id="routeSelect" onchange="updateBookingDetails()">
                     <option value="0">من مطار جدة إلى داخل جدة</option>
                     <option value="1">من مطار جدة إلى مكة</option>
                     <option value="2">من مطار جدة إلى مدينة الملك عبدالله</option>
@@ -157,7 +182,8 @@
 
             <div class="form-group">
                 <label>اختر نوع السيارة:</label>
-                <select id="carSelect" onchange="calculatePrice()">
+                <select id="carSelect" onchange="updateBookingDetails()">
+                    <option value="" disabled selected>-- اختر السيارة لتظهر صورتها --</option>
                     <option value="taurus">فورد تورس VIP (4 PAX)</option>
                     <option value="staria">هيونداي ستاريا VIP (8 PAX)</option>
                     <option value="yukon">جمس يوكون VIP (7 PAX)</option>
@@ -165,7 +191,12 @@
                 </select>
             </div>
 
-            <div class="price-display" id="priceDisplay">السعر: 150 ريال سعودي</div>
+            <!-- مربع عرض صورة السيارة المختارة (مخفي حتى يتم الاختيار) -->
+            <div class="selected-car-preview">
+                <img id="carImagePreview" src="" alt="صورة السيارة المختارة">
+            </div>
+
+            <div class="price-display" id="priceDisplay">السعر: اختر المسار والسيارة للتعرف على السعر</div>
             
             <button onclick="sendToWhatsapp()">تأكيد الحجز عبر الواتساب 💬</button>
         </div>
@@ -173,24 +204,36 @@
         <h2 style="text-align: center; margin-top: 4rem; color: var(--primary);">أسطول GO MAX Travel</h2>
         <div class="fleet-grid">
             <div class="fleet-card">
-                <h3>فورد تورس VIP</h3>
-                <p>سعة 4 ركاب</p>
-                <p>تنقلات VIP سريعة ومريحة</p>
+                <img src="./فورد-تورس-ترند-2.0-2026-2.jpg" alt="فورد تورس VIP">
+                <div class="fleet-card-body">
+                    <h3>فورد تورس VIP</h3>
+                    <p>سعة 4 ركاب</p>
+                    <p>تنقلات VIP سريعة ومريحة</p>
+                </div>
             </div>
             <div class="fleet-card">
-                <h3>هيونداي ستاريا VIP</h3>
-                <p>سعة 8 ركاب</p>
-                <p>مساحات واسعة ومناسبة للعائلات والمجموعات</p>
+                <img src="./استاريا.webp" alt="هيونداي ستاريا VIP">
+                <div class="fleet-card-body">
+                    <h3>هيونداي ستاريا VIP</h3>
+                    <p>سعة 8 ركاب</p>
+                    <p>مساحات واسعة ومناسبة للعائلات والمجموعات</p>
+                </div>
             </div>
             <div class="fleet-card">
-                <h3>جمس يوكون VIP</h3>
-                <p>سعة 7 ركاب</p>
-                <p>فخامة مطلقة واستقبال كبار الشخصيات</p>
+                <img src="./جيمس.jpg" alt="جمس يوكون VIP">
+                <div class="fleet-card-body">
+                    <h3>جمس يوكون VIP</h3>
+                    <p>سعة 7 ركاب</p>
+                    <p>فخامة مطلقة واستقبال كبار الشخصيات</p>
+                </div>
             </div>
             <div class="fleet-card">
-                <h3>تويوتا هايس</h3>
-                <p>سعة 11 راكب</p>
-                <p>الحل المثالي لبرامج العمرة والوفود السياحية</p>
+                <img src="./هايس-فان-2026-ركاب-سقف-مرتفع-ديزل-قير-عادي.webp" alt="تويوتا هايس">
+                <div class="fleet-card-body">
+                    <h3>تويوتا هايس</h3>
+                    <p>سعة 11 راكب</p>
+                    <p>الحل المثالي لبرامج العمرة والوفود السياحية</p>
+                </div>
             </div>
         </div>
 
@@ -207,6 +250,13 @@
     </footer>
 
     <script>
+        const carImages = {
+            taurus: './فورد-تورس-ترند-2.0-2026-2.jpg',
+            staria: './استاريا.webp',
+            yukon: './جيمس.jpg',
+            hiace: './هايس-فان-2026-ركاب-سقف-مرتفع-ديزل-قير-عادي.webp'
+        };
+
         const prices = [
             { taurus: 150, staria: 200, yukon: 250, hiace: 250 },
             { taurus: 250, staria: 300, yukon: 400, hiace: 400 },
@@ -223,17 +273,43 @@
             { taurus: 1500, staria: 1700, yukon: 2500, hiace: 2200 }
         ];
 
-        function calculatePrice() {
-            const routeIndex = document.getElementById('routeSelect').value;
-            const carType = document.getElementById('carSelect').value;
+        function updateBookingDetails() {
+            const routeSelect = document.getElementById('routeSelect');
+            const carSelect = document.getElementById('carSelect');
+            const priceDisplay = document.getElementById('priceDisplay');
+            const carImagePreview = document.getElementById('carImagePreview');
+
+            const routeIndex = routeSelect.value;
+            const carType = carSelect.value;
+
+            // إذا لم يتم اختيار نوع سيارة بعد، قم بإخفاء مربع السعر وصورة السيارة
+            if (!carType) {
+                priceDisplay.innerText = "السعر: اختر السيارة للتعرف على السعر";
+                carImagePreview.style.display = 'none';
+                return;
+            }
+
+            // تحديث السعر بناءً على المسار والسيارة
             const selectedPrice = prices[routeIndex][carType];
-            
-            document.getElementById('priceDisplay').innerText = `السعر: ${selectedPrice} ريال سعودي`;
+            priceDisplay.innerText = `السعر: ${selectedPrice} ريال سعودي`;
+
+            // تحديث صورة السيارة بناءً على الاختيار
+            carImagePreview.src = carImages[carType];
+            carImagePreview.style.display = 'block'; // إظهار الصورة
         }
 
         function sendToWhatsapp() {
-            const routeText = document.getElementById('routeSelect').options[document.getElementById('routeSelect').selectedIndex].text;
-            const carText = document.getElementById('carSelect').options[document.getElementById('carSelect').selectedIndex].text;
+            const routeSelect = document.getElementById('routeSelect');
+            const carSelect = document.getElementById('carSelect');
+            
+            const routeText = routeSelect.options[routeSelect.selectedIndex].text;
+            const carText = carSelect.options[carSelect.selectedIndex].text;
+            
+            if (!carSelect.value) {
+                alert("يرجى اختيار نوع السيارة أولاً!");
+                return;
+            }
+
             const priceText = document.getElementById('priceDisplay').innerText;
 
             const phoneNumber = "966508006718";
@@ -247,6 +323,9 @@
             const message = `مرحباً GO MAX Travel، نحن شركة ونود الاستفسار عن التعاقدات والأسعار المخصصة للشركات.`;
             window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
         }
+
+        // تشغيل الدالة مرة واحدة للتأكد من الحالة الابتدائية
+        updateBookingDetails();
     </script>
 </body>
 </html>
